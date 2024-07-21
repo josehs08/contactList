@@ -1,23 +1,99 @@
 const getState = ({ getStore, getActions, setStore }) => {
 
-	const URLBASE = "https://playground.4geeks.com/contact"
 	return {
 		store: {
-			contacts:[{}]
+			urlbase : "https://playground.4geeks.com/contact/agendas",
+			contacts:[]
 		},
 		actions: {
-			getAgenda: async ()=>{
+
+			editContact: async (newContact, id)=>{
 				try{
-					const response = await fetch(`${URLBASE}/agendas`);
-					const data = await response.json();
+					const response = await fetch(`${getStore().urlbase}/joseh/contacts/${id}`,{
+						method: 'PUT',
+						headers: {'Content-Type': 'application/json'},
+						body:JSON.stringify(newContact)
+						
+					})
 					if(response.ok){
-						console.log(data);
+						getActions().getAgenda();
+						return true;
+					}
+
+				}catch(error){
+					console.log(error)
+				}
+			},
+
+			addContact: (newContact) => {
+				setStore({contacts: [newContact]});
+			},
+
+			crearAgenda: async () => {
+				try{
+					const response = await fetch(`${getStore().urlbase}/joseh`, {
+						method: 'POST'
+					})
+					if(response.ok){
+						return true;
+					} else {
+						return false;
 					}
 				}
 				catch(error){
-					console.log(error)
+					console.log(error);
 				}
+			},
+
+			postAgenda: async (contacts)=>{
+				try{
+					const response = await fetch(`${getStore().urlbase}/joseh/contacts`, {
+						method: 'POST',
+						headers: {'Content-Type': 'application/json'},
+						body:JSON.stringify(contacts)
+					})
+					if(response.ok){
+						getActions().getAgenda();
+					}
+				} 
+				catch (error){
+					console.log(error);
+				}
+			},
+
+			getAgenda: async ()=>{
+				try{
+					const response = await fetch(`${getStore().urlbase}/joseh`);
+					const data = await response.json();
+					if(response.ok){
+						setStore({contacts: data.contacts})
+						return(data.contacts)
+					} else {
+						getActions().crearAgenda();
+					}
+				}
+				catch(error){
+					console.log(error);
+				}
+			},
+			
+			deleteContact: async (id) => {
+				try{
+					const response = await fetch(`${getStore().urlbase}/joseh/contacts/${id}`, {
+                        method: 'DELETE'
+                    })
+                    if(response.ok){
+                        getActions().getAgenda();
+                    } else {
+						return false;
+					}
+				}
+				catch(error){
+					console.log(error);
+				}
+
 			}
+
 		}
 	};
 };

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import {Contact} from "./views/Contact.jsx"
 import {AddContact} from "./views/AddContact.jsx"
+import {EditContact} from "./views/EditContact.jsx"
 
 import injectContext from "./store/appContext";
 
@@ -19,6 +20,7 @@ const Layout = () => {
 					<Routes>
 						<Route path="/" element={<Contact />} />
 						<Route path="/addcontact" element={<AddContact />} />
+						<Route path={"/edit/:id"} element={<EditContact/>}/>
 						<Route path="*" element={<h1>Not found!</h1>} />
 					</Routes>
 			</BrowserRouter>
