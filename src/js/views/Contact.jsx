@@ -18,12 +18,12 @@ export const Contact = () => {
 
     if (contactList.length === 0) {
         return (
-            <>
-                <h1>No contacts found</h1>
+            <div className="d-flex flex-column mx-auto p-4">
+                <h1 className="mb-4">No contacts found</h1>
                 <Link to="/addcontact">
                     <button className="btn btn-success">Add Contact</button>
                 </Link>
-            </>
+            </div>
         );
     }
 
