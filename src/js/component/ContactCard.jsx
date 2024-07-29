@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext"
+import Swal from 'sweetalert2'
 
 
 export const ContactCard = ({ contact }) => {
@@ -44,7 +45,26 @@ export const ContactCard = ({ contact }) => {
 
             </div>
             <div className="d-flex ms-auto mb-auto gap-3">
-                <button className="btn btn-primary" onClick={() => handleDelete(contact.id)} >
+                <button className="btn btn-primary" onClick={
+                    () => Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            handleDelete(contact.id)
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
+                } >
                     🗑️
                 </button>
                 <Link to={`/edit/${contact.id}`}>
